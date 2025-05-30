@@ -1,3 +1,3 @@
 # Clinic-Appointment-Scheduler
 # Introduction
-Allows users to book, view, update, and cancel appointments.
+The **Clinic Appointment Scheduler** is a web-based application designed to simplify the process of booking, managing, and canceling medical appointments at walk-in clinics. Built using C# and .NET in Visual Studio 2022, the app aims to reduce wait times and eliminate the inefficiencies of manual booking systems for both patients and clinic staff.
