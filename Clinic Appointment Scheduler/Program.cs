@@ -58,17 +58,14 @@ class Program
                     break;
 
                 case "3":
-                    // View appointment by Booking ID
+                    //View  appointment by user ID
                     Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
                     Console.WriteLine("Press the Enter key to continue.");
                     readResult = Console.ReadLine();
                     break;
 
                 case "4":
-                    // Update an appointment
-                    Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
-                    Console.WriteLine("Press the Enter key to continue.");
-                    readResult = Console.ReadLine();
+                    UpdateAppointment(appointments);
                     break;
 
                 case "5":
@@ -184,4 +181,106 @@ class Program
 
         return nextBookingId + 1;
     }
-}
+
+
+    static void UpdateAppointment(List<string[]> appointments) // Updated parameter
+    {
+        Console.Clear();
+        Console.WriteLine("=== Update an Appointment ===");
+
+        Console.Write("Enter Booking ID to update: ");
+        string bookingId = Console.ReadLine() ?? "";
+
+        string[] appointmentToUpdate = null;
+        int index = -1; // To keep track of the index if needed for direct access (less common with List)
+        for (int i = 0; i < appointments.Count; i++) // Iterate using index for potential direct modification
+        {
+            if (appointments[i][0].Equals(bookingId, StringComparison.OrdinalIgnoreCase))
+            {
+                appointmentToUpdate = appointments[i];
+                index = i;
+                break;
+            }
+        }
+
+        if (appointmentToUpdate == null)
+        {
+            Console.WriteLine("Appointment not found.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadLine();
+            return;
+        }
+
+        Console.WriteLine("\nLeave blank to keep existing value.");
+
+        Console.Write($"Patient Name [{appointmentToUpdate[1]}]: ");
+        string input = Console.ReadLine() ?? "";
+        if (!string.IsNullOrWhiteSpace(input)) appointmentToUpdate[1] = input;
+
+        Console.Write($"Health Card Number [{appointmentToUpdate[2]}]: ");
+        input = Console.ReadLine() ?? "";
+        if (!string.IsNullOrWhiteSpace(input)) appointmentToUpdate[2] = input;
+
+        // Validate date input
+        bool validDate;
+        do
+        {
+            Console.Write($"Date [{appointmentToUpdate[3]}]: ");
+            input = Console.ReadLine() ?? "";
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                validDate = true; // Keep existing value
+            }
+            else
+            {
+                validDate = DateTime.TryParseExact(input, "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+
+                if (validDate)
+                {
+                    appointmentToUpdate[3] = input;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid date format. Please use YYYY-MM-DD format (e.g., 2023-12-31).");
+                }
+            }
+        } while (!validDate);
+
+        // Validate time input
+        bool validTime;
+        do
+        {
+            Console.Write($"Time [{appointmentToUpdate[4]}]: ");
+            input = Console.ReadLine() ?? "";
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                validTime = true; // Keep existing value
+            }
+            else
+            {
+                validTime = DateTime.TryParseExact(input, "HH:mm",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+
+                if (validTime)
+                {
+                    appointmentToUpdate[4] = input;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
+                }
+            }
+        } while (!validTime);
+
+        Console.Write($"Reason [{appointmentToUpdate[5]}]: ");
+        input = Console.ReadLine() ?? "";
+        if (!string.IsNullOrWhiteSpace(input)) appointmentToUpdate[5] = input;
+
+        Console.WriteLine("\nAppointment updated successfully!");
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadLine();
+    }
+}   
