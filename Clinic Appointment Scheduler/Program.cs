@@ -47,10 +47,7 @@ class Program
             switch (menuSelection)
             {
                 case "1":
-                    // Book a new appointment
-                    Console.WriteLine("UNDER CONSTRUCTION - working on it.");
-                    Console.WriteLine("Press the Enter key to continue.");
-                    readResult = Console.ReadLine();
+                    nextBookingId = BookNewAppointment(appointments, nextBookingId);
                     break;
 
                 case "2":
@@ -86,5 +83,105 @@ class Program
             }
 
         } while (menuSelection != "exit");
+
+        Console.WriteLine("Thank you for using the COAT Clinic Appointment Scheduler!");
+    }
+
+    static int BookNewAppointment(List<string[]> appointments, int nextBookingId)
+    {
+        Console.Clear();
+        Console.WriteLine("=== Book a New Appointment ===");
+
+        // No need to check for empty slot, List can grow
+        // Collect required information with validation
+        string patientName, appointmentDate, appointmentTime, reason;
+
+        // Get Patient Name (required)
+        do
+        {
+            Console.Write("Enter Patient Name (required): ");
+            patientName = Console.ReadLine() ?? "";
+            if (string.IsNullOrWhiteSpace(patientName))
+            {
+                Console.WriteLine("Patient name is required. Please try again.");
+            }
+        } while (string.IsNullOrWhiteSpace(patientName));
+
+        // Get Health Card Number (optional)
+        Console.Write("Enter Health Card Number (optional): ");
+        string healthCard = Console.ReadLine() ?? "";
+
+        // Validate date format (YYYY-MM-DD)
+        bool validDate;
+        do
+        {
+            Console.Write("Enter Appointment Date (YYYY-MM-DD) (required): ");
+            appointmentDate = Console.ReadLine() ?? "";
+
+            if (string.IsNullOrWhiteSpace(appointmentDate))
+            {
+                Console.WriteLine("Appointment date is required. Please try again.");
+                validDate = false;
+            }
+            else
+            {
+                validDate = DateTime.TryParseExact(appointmentDate, "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+
+                if (!validDate)
+                    Console.WriteLine("Invalid date format. Please use YYYY-MM-DD format (e.g., 2023-12-31).");
+            }
+        } while (!validDate);
+
+        // Validate time format (HH:mm)
+        bool validTime;
+        do
+        {
+            Console.Write("Enter Appointment Time (HH:mm) (required): ");
+            appointmentTime = Console.ReadLine() ?? "";
+
+            if (string.IsNullOrWhiteSpace(appointmentTime))
+            {
+                Console.WriteLine("Appointment time is required. Please try again.");
+                validTime = false;
+            }
+            else
+            {
+                validTime = DateTime.TryParseExact(appointmentTime, "HH:mm",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+
+                if (!validTime)
+                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
+            }
+        } while (!validTime);
+
+        // Get Reason for Visit (required)
+        do
+        {
+            Console.Write("Enter Reason for Visit (required): ");
+            reason = Console.ReadLine() ?? "";
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                Console.WriteLine("Reason for visit is required. Please try again.");
+            }
+        } while (string.IsNullOrWhiteSpace(reason));
+
+        // Create a new string array for the appointment and add it to the list
+        string[] newAppointment = new string[6];
+        newAppointment[0] = nextBookingId.ToString();
+        newAppointment[1] = patientName;
+        newAppointment[2] = healthCard;
+        newAppointment[3] = appointmentDate;
+        newAppointment[4] = appointmentTime;
+        newAppointment[5] = reason;
+
+        appointments.Add(newAppointment); // Add the new appointment to the list
+
+        Console.WriteLine("\n** Appointment booked successfully! **");
+        Console.WriteLine($"* Your Booking ID is: {nextBookingId} *");
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadLine();
+
+        return nextBookingId + 1;
     }
 }
