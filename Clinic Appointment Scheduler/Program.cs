@@ -6,7 +6,7 @@ class Program
 {
     static void Main()
     {
-        //Removed maxAppointmentss as List handles dynamic sizing}
+        //Removed maxAppointmentss as List handles dynamic sizing
         // the appointments array will store the following details:
         // string patientName
         // string bookingID
