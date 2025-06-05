@@ -50,7 +50,7 @@ do
     {
         case "1":
             // Book a new appointment
-            Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
+            Console.WriteLine("UNDER CONSTRUCTION - working on it.");
             Console.WriteLine("Press the Enter key to continue.");
             readResult = Console.ReadLine();
             break;
