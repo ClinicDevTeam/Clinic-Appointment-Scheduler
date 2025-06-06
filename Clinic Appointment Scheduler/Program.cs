@@ -47,28 +47,29 @@ class Program
             switch (menuSelection)
             {
                 case "1":
+                    // Book a new appointment
                     nextBookingId = BookNewAppointment(appointments, nextBookingId);
                     break;
 
                 case "2":
                     // View all scheduled appointments
-                    Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
-                    Console.WriteLine("Press the Enter key to continue.");
-                    readResult = Console.ReadLine();
+                    ViewAllAppointments(appointments);
                     break;
 
                 case "3":
-                    //View  appointment by user ID
+                    //View  appointment by Booking ID
                     Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
                     Console.WriteLine("Press the Enter key to continue.");
                     readResult = Console.ReadLine();
                     break;
 
                 case "4":
+                    // Update an appointment
                     UpdateAppointment(appointments);
                     break;
 
                 case "5":
+                    // Cancel an appointment
                     CancelAppointment(appointments);
                     break;
 
@@ -179,6 +180,35 @@ class Program
         return nextBookingId + 1;
     }
 
+    static void ViewAllAppointments(List<string[]> appointments)
+    {
+        Console.Clear();
+        Console.WriteLine("=== All Scheduled Appointments ===\n");
+
+        bool hasAppointments = false;
+
+        // Iterate through the List
+        foreach (string[] appointment in appointments)
+        {
+            if (!string.IsNullOrEmpty(appointment[0])) // Check if the slot is "occupied"
+            {
+                hasAppointments = true;
+                Console.WriteLine($"Booking ID: {appointment[0]}");
+                Console.WriteLine($"Patient Name: {appointment[1]}");
+                Console.WriteLine($"Health Card Number: {(string.IsNullOrEmpty(appointment[2]) ? "Not provided" : appointment[2])}");
+                Console.WriteLine($"Date: {appointment[3]}");
+                Console.WriteLine($"Time: {appointment[4]}");
+                Console.WriteLine($"Reason: {appointment[5]}");
+                Console.WriteLine();
+            }
+        }
+
+        if (!hasAppointments)
+            Console.WriteLine("No appointments scheduled.");
+
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadLine();
+    }
 
     static void UpdateAppointment(List<string[]> appointments) // Updated parameter
     {
