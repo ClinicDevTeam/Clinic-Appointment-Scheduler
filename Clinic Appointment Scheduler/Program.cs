@@ -69,10 +69,7 @@ class Program
                     break;
 
                 case "5":
-                    // Cancel an appointment
-                    Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
-                    Console.WriteLine("Press the Enter key to continue.");
-                    readResult = Console.ReadLine();
+                    CancelAppointment(appointments);
                     break;
 
                 default:
@@ -283,4 +280,50 @@ class Program
         Console.WriteLine("Press any key to continue...");
         Console.ReadLine();
     }
-}   
+
+    static void CancelAppointment(List<string[]> appointments) // Updated parameter
+    {
+        Console.Clear();
+        Console.WriteLine("=== Cancel an Appointment ===");
+
+        Console.Write("Enter Booking ID to cancel: ");
+        string bookingId = Console.ReadLine() ?? "";
+
+        string[] appointmentToCancel = null;
+        int indexToRemove = -1; // Keep track of the index to remove
+        for (int i = 0; i < appointments.Count; i++)
+        {
+            if (appointments[i][0].Equals(bookingId, StringComparison.OrdinalIgnoreCase))
+            {
+                appointmentToCancel = appointments[i];
+                indexToRemove = i;
+                break;
+            }
+        }
+
+        if (appointmentToCancel == null)
+        {
+            Console.WriteLine("Appointment not found.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadLine();
+            return;
+        }
+
+        Console.Write($"Are you sure you want to cancel Booking ID {appointmentToCancel[0]}? (y/n): ");
+        string confirm = Console.ReadLine() ?? "";
+        if (confirm.ToLower() == "y")
+        {
+            appointments.RemoveAt(indexToRemove); // Remove the appointment from the list
+            Console.WriteLine("Appointment canceled.");
+        }
+        else
+        {
+            Console.WriteLine("Cancellation aborted.");
+        }
+
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadLine();
+    }
+}
+
+   
