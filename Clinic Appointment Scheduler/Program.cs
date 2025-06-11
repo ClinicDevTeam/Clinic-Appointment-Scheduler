@@ -58,9 +58,7 @@ class Program
 
                 case "3":
                     //View  appointment by Booking ID
-                    Console.WriteLine("UNDER CONSTRUCTION - please check back soon to see progress.");
-                    Console.WriteLine("Press the Enter key to continue.");
-                    readResult = Console.ReadLine();
+                    ViewAppointmentById(appointments);
                     break;
 
                 case "4":
@@ -205,6 +203,42 @@ class Program
 
         if (!hasAppointments)
             Console.WriteLine("No appointments scheduled.");
+
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadLine();
+    }
+
+    static void ViewAppointmentById(List<string[]> appointments) // Updated parameter
+    {
+        Console.Clear();
+        Console.WriteLine("=== View Appointment by Booking ID ===");
+
+        Console.Write("Enter Booking ID: ");
+        string bookingId = Console.ReadLine() ?? "";
+
+        string[] foundAppointment = null; // To store the found appointment
+        foreach (string[] appointment in appointments)
+        {
+            if (appointment[0].Equals(bookingId, StringComparison.OrdinalIgnoreCase))
+            {
+                foundAppointment = appointment;
+                break;
+            }
+        }
+
+        if (foundAppointment == null)
+        {
+            Console.WriteLine("Appointment not found.");
+        }
+        else
+        {
+            Console.WriteLine($"\nBooking ID: {foundAppointment[0]}");
+            Console.WriteLine($"Patient Name: {foundAppointment[1]}");
+            Console.WriteLine($"Health Card Number: {(string.IsNullOrEmpty(foundAppointment[2]) ? "Not provided" : foundAppointment[2])}");
+            Console.WriteLine($"Date: {foundAppointment[3]}");
+            Console.WriteLine($"Time: {foundAppointment[4]}");
+            Console.WriteLine($"Reason: {foundAppointment[5]}");
+        }
 
         Console.WriteLine("Press any key to continue...");
         Console.ReadLine();
