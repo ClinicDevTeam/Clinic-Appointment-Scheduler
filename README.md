@@ -41,3 +41,47 @@ Using Visual Studio 2022, the project is feasible within the 2-week timeline (Ju
 •	Input Validation & error handling  
 •	Final testing  
 •	Documentation & presentation preparations  
+
+### 📋 Backlog (Not Started)
+
+| Task                                    | Assigned To | Notes                     |
+|-----------------------------------------|-------------|---------------------------|
+| Prevent booking past dates              |             | Not yet started           |
+| Restrict dates to business hours        |             | Not yet started           |
+| Save and load appointments to/from file |             | Not yet started           |
+|                                         |             |                           |
+|                                         |             |                           |
+|                                         |             |                           |
+
+### 🔧 In Progress (Tasks)
+
+| Task                                    | Assigned To | Notes                     |
+|-----------------------------------------|-------------|---------------------------|
+|                                         |             |                           |
+|                                         |             |                           |
+|                                         |             |                           |
+|                                         |             |                           |
+|                                         |             |                           |
+|                                         |             |                           |
+
+### 🔍 In Review 
+
+| Task                                    | Assigned To | Notes                     |
+|-----------------------------------------|-------------|---------------------------|
+| Remove search by date and doctor        |             |                           |
+| Include the cancel appointment feature  |             |                           |
+| Include the save appointment feature    |             |                           |
+| Include the view all appt. feature      |             |                           |
+| Include the view specific appt. feature |             |                           |
+|                                         |             |                           |
+
+### ✅ Completed
+
+| Task                                    | Assigned To | Notes                         |
+|-----------------------------------------|-------------|-------------------------------|
+| Create the main menu                    | Olatunji    | Done with 5 menu options      |
+| Include the book new appt. feature      | Anthony     | Done; takes patient info      |
+|                                         |             |                               |
+|                                         |             |                               |
+|                                         |             |                               |
+|                                         |             |                               |
