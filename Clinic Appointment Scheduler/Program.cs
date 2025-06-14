@@ -148,8 +148,6 @@ class Program
         Console.Clear();
         Console.WriteLine("=== Book a New Appointment ===");
 
-        // No need to check for empty slot, List can grow
-        // Collect required information with validation
         string patientName, appointmentDate, appointmentTime, reason;
 
         // Get Patient Name (required)
@@ -167,8 +165,9 @@ class Program
         Console.Write("Enter Health Card Number (optional): ");
         string healthCard = Console.ReadLine() ?? "";
 
-        // Validate date format (YYYY-MM-DD)
+        // Validate date format (YYYY-MM-DD) and ensure it's not in the past
         bool validDate;
+        DateTime parsedDate;
         do
         {
             Console.Write("Enter Appointment Date (YYYY-MM-DD) (required): ");
@@ -182,18 +181,26 @@ class Program
             else
             {
                 validDate = DateTime.TryParseExact(appointmentDate, "yyyy-MM-dd",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate);
 
                 if (!validDate)
+                {
                     Console.WriteLine("Invalid date format. Please use YYYY-MM-DD format (e.g., 2023-12-31).");
+                }
+                else if (parsedDate.Date < DateTime.Today)
+                {
+                    Console.WriteLine("Appointment date cannot be in the past. Please enter a future date.");
+                    validDate = false;
+                }
             }
         } while (!validDate);
 
-        // Validate time format (HH:mm)
+        // Validate time format (HH:mm) and ensure it's between 8:00 AM and 3:00 PM
         bool validTime;
+        DateTime parsedTime;
         do
         {
-            Console.Write("Enter Appointment Time (HH:mm) (required): ");
+            Console.Write("Enter Appointment Time (HH:mm) - Available hours: 08:00 to 15:00 (required): ");
             appointmentTime = Console.ReadLine() ?? "";
 
             if (string.IsNullOrWhiteSpace(appointmentTime))
@@ -204,10 +211,25 @@ class Program
             else
             {
                 validTime = DateTime.TryParseExact(appointmentTime, "HH:mm",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedTime);
 
                 if (!validTime)
+                {
                     Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
+                }
+                else
+                {
+                    // Check if time is between 8:00 AM (08:00) and 3:00 PM (15:00)
+                    TimeSpan appointmentTimeSpan = parsedTime.TimeOfDay;
+                    TimeSpan startTime = new TimeSpan(8, 0, 0);  // 8:00 AM
+                    TimeSpan endTime = new TimeSpan(15, 0, 0);   // 3:00 PM
+                    
+                    if (appointmentTimeSpan < startTime || appointmentTimeSpan > endTime)
+                    {
+                        Console.WriteLine("Appointment time must be between 08:00 and 15:00 (8:00 AM to 3:00 PM).");
+                        validTime = false;
+                    }
+                }
             }
         } while (!validTime);
 
@@ -222,7 +244,7 @@ class Program
             }
         } while (string.IsNullOrWhiteSpace(reason));
 
-        // Create a new string array for the appointment and add it to the list
+        // Create a new appointment
         string[] newAppointment = new string[6];
         newAppointment[0] = nextBookingId.ToString();
         newAppointment[1] = patientName;
@@ -231,7 +253,10 @@ class Program
         newAppointment[4] = appointmentTime;
         newAppointment[5] = reason;
 
-        appointments.Add(newAppointment); // Add the new appointment to the list
+        appointments.Add(newAppointment);
+
+        // Save to file after adding
+        SaveAppointments(appointments);
 
         Console.WriteLine("\n** Appointment booked successfully! **");
         Console.WriteLine($"* Your Booking ID is: {nextBookingId} *");
