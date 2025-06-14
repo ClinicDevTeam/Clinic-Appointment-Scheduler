@@ -8,7 +8,6 @@ class Program
 {
     static void Main()
     {
-        //Removed maxAppointmentss as List handles dynamic sizing
         // the appointments array will store the following details:
         // string patientName
         // string bookingID
@@ -25,6 +24,9 @@ class Program
 
         // array used to store runtime data, there is no persisted data
         List<string[]> appointments = new List<string[]>();
+
+        // Load appointments when program starts and get the next booking ID
+        nextBookingId = LoadAppointments(appointments);
 
         // display the top-level menu options
         do
@@ -80,6 +82,65 @@ class Program
         } while (menuSelection != "exit");
 
         Console.WriteLine("Thank you for using the COAT Clinic Appointment Scheduler!");
+    }
+
+    // Modified function to load appointments from a file and return the next available booking ID
+    static int LoadAppointments(List<string[]> appointments)
+    {
+        int nextId = 1001; // Default starting ID
+
+        try
+        {
+            if (File.Exists("appointments.txt"))
+            {
+                string[] lines = File.ReadAllLines("appointments.txt");
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split('|');
+                    appointments.Add(parts);
+                }
+
+                // Find the highest booking ID and set next ID accordingly
+                if (appointments.Count > 0)
+                {
+                    int maxId = 0;
+                    foreach (string[] appointment in appointments)
+                    {
+                        if (int.TryParse(appointment[0], out int currentId))
+                        {
+                            if (currentId > maxId)
+                                maxId = currentId;
+                        }
+                    }
+                    nextId = maxId + 1;
+                }
+            }
+        }
+        catch
+        {
+            // If something goes wrong, just continue with default ID
+        }
+
+        return nextId;
+    }
+
+    // Simple function to save appointments to file
+    static void SaveAppointments(List<string[]> appointments)
+    {
+        try
+        {
+            List<string> lines = new List<string>();
+            foreach (string[] appointment in appointments)
+            {
+                string line = string.Join("|", appointment);
+                lines.Add(line);
+            }
+            File.WriteAllLines("appointments.txt", lines);
+        }
+        catch
+        {
+            // If something goes wrong, just continue
+        }
     }
 
     static int BookNewAppointment(List<string[]> appointments, int nextBookingId)
@@ -380,6 +441,7 @@ class Program
         if (confirm.ToLower() == "y")
         {
             appointments.RemoveAt(indexToRemove); // Remove the appointment from the list
+            SaveAppointments(appointments); // Save the updated list to file
             Console.WriteLine("Appointment canceled.");
         }
         else
