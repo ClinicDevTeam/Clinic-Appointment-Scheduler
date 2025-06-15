@@ -370,8 +370,9 @@ class Program
         input = Console.ReadLine() ?? "";
         if (!string.IsNullOrWhiteSpace(input)) appointmentToUpdate[2] = input;
 
-        // Validate date input
+        // Validate date input with past date check
         bool validDate;
+        DateTime parsedDate;
         do
         {
             Console.Write($"Date [{appointmentToUpdate[3]}]: ");
@@ -384,21 +385,27 @@ class Program
             else
             {
                 validDate = DateTime.TryParseExact(input, "yyyy-MM-dd",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate);
 
-                if (validDate)
-                {
-                    appointmentToUpdate[3] = input;
-                }
-                else
+                if (!validDate)
                 {
                     Console.WriteLine("Invalid date format. Please use YYYY-MM-DD format (e.g., 2023-12-31).");
                 }
+                else if (parsedDate.Date < DateTime.Today)
+                {
+                    Console.WriteLine("Appointment date cannot be in the past. Please enter a future date.");
+                    validDate = false;
+                }
+                else
+                {
+                    appointmentToUpdate[3] = input;
+                }
             }
-        } while (!validDate);
+    } while (!validDate);
 
-        // Validate time input
+        // Validate time inputwith business hours check
         bool validTime;
+        DateTime parsedTime;
         do
         {
             Console.Write($"Time [{appointmentToUpdate[4]}]: ");
@@ -411,15 +418,28 @@ class Program
             else
             {
                 validTime = DateTime.TryParseExact(input, "HH:mm",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedTime);
 
-                if (validTime)
+                if (!validTime)
                 {
-                    appointmentToUpdate[4] = input;
+                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
                 }
                 else
                 {
-                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
+                    // Check if time is between 8:00 AM (08:00) and 3:00 PM (15:00)
+                    TimeSpan appointmentTimeSpan = parsedTime.TimeOfDay;
+                    TimeSpan startTime = new TimeSpan(8, 0, 0);  // 8:00 AM
+                    TimeSpan endTime = new TimeSpan(15, 0, 0);   // 3:00 PM
+
+                    if (appointmentTimeSpan < startTime || appointmentTimeSpan > endTime)
+                    {
+                        Console.WriteLine("Appointment time must be between 08:00 and 15:00 (8:00 AM to 3:00 PM).");
+                        validTime = false;
+                    }
+                    else
+                    {
+                        appointmentToUpdate[4] = input;
+                    }
                 }
             }
         } while (!validTime);

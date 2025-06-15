@@ -13,3 +13,18 @@ C:\Users\Anthony Mbanu\Desktop\Cambrian - myCambrian\Github\Clinic Appointment S
 C:\Users\Anthony Mbanu\Desktop\Cambrian - myCambrian\Github\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.pdb
 C:\Users\Anthony Mbanu\Desktop\Cambrian - myCambrian\Github\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.genruntimeconfig.cache
 C:\Users\Anthony Mbanu\Desktop\Cambrian - myCambrian\Github\Clinic Appointment Scheduler\obj\Debug\net8.0\ref\Clinic Appointment Scheduler.dll
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\bin\Debug\net8.0\Clinic Appointment Scheduler.exe
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\bin\Debug\net8.0\Clinic Appointment Scheduler.deps.json
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\bin\Debug\net8.0\Clinic Appointment Scheduler.runtimeconfig.json
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\bin\Debug\net8.0\Clinic Appointment Scheduler.dll
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\bin\Debug\net8.0\Clinic Appointment Scheduler.pdb
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.AssemblyInfoInputs.cache
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.AssemblyInfo.cs
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.csproj.CoreCompileInputs.cache
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.sourcelink.json
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.dll
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\refint\Clinic Appointment Scheduler.dll
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.pdb
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\Clinic Appointment Scheduler.genruntimeconfig.cache
+C:\Users\USER\OneDrive\Desktop\GitHub\Clinic Appointment Scheduler\obj\Debug\net8.0\ref\Clinic Appointment Scheduler.dll
