@@ -68,8 +68,8 @@ Using Visual Studio 2022, the project is feasible within the 2-week timeline (Ju
 
 | Task                                    | Assigned To | Notes                     |
 |-----------------------------------------|-------------|---------------------------|
-| Remove search by date and doctor        |             |                           |
-| Include the cancel appointment feature  |             |                           |
+|                                         |             |                           |
+|                                         |             |                           |
 | Include the save appointment feature    |             |                           |
 | Include the view all appt. feature      |             |                           |
 | Include the view specific appt. feature |             |                           |
@@ -81,7 +81,7 @@ Using Visual Studio 2022, the project is feasible within the 2-week timeline (Ju
 |-----------------------------------------|-------------|-------------------------------|
 | Create the main menu                    | Olatunji    | Done with 5 menu options      |
 | Include the book new appt. feature      | Anthony     | Done; takes patient info      |
-|                                         |             |                               |
-|                                         |             |                               |
+| Remove search by date and doctor        |             |                               |
+| Include the cancel appointment feature  |             |                               |
 |                                         |             |                               |
 |                                         |             |                               |
