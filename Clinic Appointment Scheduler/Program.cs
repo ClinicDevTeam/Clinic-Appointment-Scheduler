@@ -84,7 +84,7 @@ class Program
         Console.WriteLine("Thank you for using the COAT Clinic Appointment Scheduler!");
     }
 
-    // Modified function to load appointments from a file and return the next available booking ID
+    // Function to load appointments from a file and return the next available booking ID
     static int LoadAppointments(List<string[]> appointments)
     {
         int nextId = 1001; // Default starting ID
@@ -124,7 +124,7 @@ class Program
         return nextId;
     }
 
-    // Simple function to save appointments to file
+    // Function to save appointments to file
     static void SaveAppointments(List<string[]> appointments)
     {
         try
@@ -140,6 +140,71 @@ class Program
         catch
         {
             // If something goes wrong, just continue
+        }
+    }
+
+    // Check if a time is valid (30-minute intervals only)
+    static bool IsValidTimeSlot(string timeString)
+    {
+        if (DateTime.TryParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedTime))
+        {
+            int minutes = parsedTime.Minute;
+            // Only allow :00 or :30 minutes
+            return minutes == 0 || minutes == 30;
+        }
+        return false;
+    }
+
+    // Check if a date and time slot is already booked
+    static bool IsTimeSlotBooked(List<string[]> appointments, string date, string time, string excludeBookingId = "")
+    {
+        foreach (string[] appointment in appointments)
+        {
+            // Skip the appointment we're updating (if any)
+            if (!string.IsNullOrEmpty(excludeBookingId) && appointment[0] == excludeBookingId)
+                continue;
+
+            // Check if same date and time
+            if (appointment[3] == date && appointment[4] == time)
+                return true;
+        }
+        return false;
+    }
+
+    // Show available time slots for a specific date
+    static void ShowAvailableTimeSlots(List<string[]> appointments, string date, string excludeBookingId = "")
+    {
+        Console.WriteLine($"\nAvailable time slots for {date}:");
+
+        // All possible 30-minute slots
+        string[] allSlots = {"08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+                            "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+                            "14:00", "14:30", "15:00"};
+
+        List<string> availableSlots = new List<string>();
+
+        foreach (string slot in allSlots)
+        {
+            if (!IsTimeSlotBooked(appointments, date, slot, excludeBookingId))
+            {
+                availableSlots.Add(slot);
+            }
+        }
+
+        if (availableSlots.Count == 0)
+        {
+            Console.WriteLine("No time slots available for this date.");
+        }
+        else
+        {
+            Console.Write("Available: ");
+            for (int i = 0; i < availableSlots.Count; i++)
+            {
+                Console.Write(availableSlots[i]);
+                if (i < availableSlots.Count - 1)
+                    Console.Write(", ");
+            }
+            Console.WriteLine();
         }
     }
 
@@ -195,11 +260,13 @@ class Program
             }
         } while (!validDate);
 
-        // Validate time format (HH:mm) and ensure it's between 8:00 AM and 3:00 PM
+        // Validate time format (HH:mm) with 30-minutes intervals and business hours (8:00 AM and 3:00 PM)
         bool validTime;
         DateTime parsedTime;
         do
         {
+            // Show available slots for the selected date
+            ShowAvailableTimeSlots(appointments, appointmentDate);
             Console.Write("Enter Appointment Time (HH:mm) - Available hours: 08:00 to 15:00 (required): ");
             appointmentTime = Console.ReadLine() ?? "";
 
@@ -215,18 +282,29 @@ class Program
 
                 if (!validTime)
                 {
-                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
+                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:00).");
                 }
+
                 else
                 {
                     // Check if time is between 8:00 AM (08:00) and 3:00 PM (15:00)
                     TimeSpan appointmentTimeSpan = parsedTime.TimeOfDay;
                     TimeSpan startTime = new TimeSpan(8, 0, 0);  // 8:00 AM
                     TimeSpan endTime = new TimeSpan(15, 0, 0);   // 3:00 PM
-                    
+
                     if (appointmentTimeSpan < startTime || appointmentTimeSpan > endTime)
                     {
                         Console.WriteLine("Appointment time must be between 08:00 and 15:00 (8:00 AM to 3:00 PM).");
+                        validTime = false;
+                    }
+                    else if (!IsValidTimeSlot(appointmentTime))
+                    {
+                        Console.WriteLine("Only 30-minute intervals are allowed (e.g., 08:00, 08:30, 09:00, etc.).");
+                        validTime = false;
+                    }
+                    else if (IsTimeSlotBooked(appointments, appointmentDate, appointmentTime))
+                    {
+                        Console.WriteLine("This time slot is already booked.");
                         validTime = false;
                     }
                 }
@@ -296,7 +374,7 @@ class Program
         Console.ReadLine();
     }
 
-    static void ViewAppointmentById(List<string[]> appointments) // Updated parameter
+    static void ViewAppointmentById(List<string[]> appointments)
     {
         Console.Clear();
         Console.WriteLine("=== View Appointment by Booking ID ===");
@@ -332,7 +410,7 @@ class Program
         Console.ReadLine();
     }
 
-    static void UpdateAppointment(List<string[]> appointments) // Updated parameter
+    static void UpdateAppointment(List<string[]> appointments)
     {
         Console.Clear();
         Console.WriteLine("=== Update an Appointment ===");
@@ -341,13 +419,12 @@ class Program
         string bookingId = Console.ReadLine() ?? "";
 
         string[] appointmentToUpdate = null;
-        int index = -1; // To keep track of the index if needed for direct access (less common with List)
-        for (int i = 0; i < appointments.Count; i++) // Iterate using index for potential direct modification
+        int index = -1;
+        for (int i = 0; i < appointments.Count; i++)
         {
             if (appointments[i][0].Equals(bookingId, StringComparison.OrdinalIgnoreCase))
             {
                 appointmentToUpdate = appointments[i];
-                index = i;
                 break;
             }
         }
@@ -403,11 +480,13 @@ class Program
             }
     } while (!validDate);
 
-        // Validate time inputwith business hours check
+        // Validate time input with business hours and 30-minute interval check
         bool validTime;
         DateTime parsedTime;
         do
         {
+            //show available slots for the current date
+            ShowAvailableTimeSlots(appointments, appointmentToUpdate[3], bookingId);
             Console.Write($"Time [{appointmentToUpdate[4]}]: ");
             input = Console.ReadLine() ?? "";
 
@@ -422,7 +501,7 @@ class Program
 
                 if (!validTime)
                 {
-                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:15).");
+                    Console.WriteLine("Invalid time format. Please use HH:mm format (e.g., 09:30 or 14:00).");
                 }
                 else
                 {
@@ -434,6 +513,16 @@ class Program
                     if (appointmentTimeSpan < startTime || appointmentTimeSpan > endTime)
                     {
                         Console.WriteLine("Appointment time must be between 08:00 and 15:00 (8:00 AM to 3:00 PM).");
+                        validTime = false;
+                    }
+                    else if (!IsValidTimeSlot(input))
+                    {
+                        Console.WriteLine("Only 30-minute intervals are allowed (e.g., 08:00, 08:30, 09:00, etc.).");
+                        validTime = false;
+                    }
+                    else if (IsTimeSlotBooked(appointments, appointmentToUpdate[3], input, bookingId))
+                    {
+                        Console.WriteLine("This time slot is already booked.");
                         validTime = false;
                     }
                     else
@@ -448,12 +537,13 @@ class Program
         input = Console.ReadLine() ?? "";
         if (!string.IsNullOrWhiteSpace(input)) appointmentToUpdate[5] = input;
 
+        SaveAppointments(appointments);
         Console.WriteLine("\nAppointment updated successfully!");
         Console.WriteLine("Press any key to continue...");
         Console.ReadLine();
     }
 
-    static void CancelAppointment(List<string[]> appointments) // Updated parameter
+    static void CancelAppointment(List<string[]> appointments)
     {
         Console.Clear();
         Console.WriteLine("=== Cancel an Appointment ===");
@@ -498,5 +588,3 @@ class Program
         Console.ReadLine();
     }
 }
-
-   
