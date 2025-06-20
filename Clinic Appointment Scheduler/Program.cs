@@ -208,6 +208,17 @@ class Program
         }
     }
 
+    // IMPROVED: Helper function to check if an appointment date is in the past
+    static bool IsAppointmentInPast(string appointmentDate)
+    {
+        if (DateTime.TryParseExact(appointmentDate, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+        {
+            return parsedDate.Date < DateTime.Today;
+        }
+        return false; // If we can't parse the date, assume it's not in the past
+    }
+
     static int BookNewAppointment(List<string[]> appointments, int nextBookingId)
     {
         Console.Clear();
@@ -432,6 +443,17 @@ class Program
         if (appointmentToUpdate == null)
         {
             Console.WriteLine("Appointment not found.");
+            Console.WriteLine("Note: Past appointments are automatically archived and cannot be updated.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadLine();
+            return;
+        }
+
+        // IMPROVED: Check if the appointment is in the past
+        if (IsAppointmentInPast(appointmentToUpdate[3]))
+        {
+            Console.WriteLine("This appointment is in the past and cannot be updated.");
+            Console.WriteLine("Past appointments are automatically archived.");
             Console.WriteLine("Press any key to continue...");
             Console.ReadLine();
             return;
